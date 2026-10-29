@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "따또 | 여행 초대",
   description: "따또에서 친구의 여행 초대가 도착했어요!",
   openGraph: {
-    title: "따또 여행 초대",
+    title: "따또의 여행 초대",
     description: "따또에서 친구의 여행 초대가 도착했어요!",
     images: [{ url: ogImageUrl, width: 1200, height: 630 }],
   },
