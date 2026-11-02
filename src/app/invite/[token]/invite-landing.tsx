@@ -4,12 +4,32 @@ import Image from "next/image";
 import { useState } from "react";
 
 type Invitation = {
-  deadline: string;
+  expiresAt: string | null;
   code: string;
 };
 
+function formatDeadline(expiresAt: string | null): string | null {
+  if (!expiresAt || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(expiresAt)) {
+    return null;
+  }
+
+  const date = new Date(expiresAt);
+  if (Number.isNaN(date.getTime())) return null;
+
+  const parts = new Intl.DateTimeFormat("ko-KR", {
+    timeZone: "Asia/Seoul",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    hourCycle: "h23",
+  }).formatToParts(date);
+  const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((value) => value.type === type)?.value;
+  return `${part("month")}월 ${part("day")}일 ${part("hour")}시`;
+}
+
 export default function InviteLanding({ invitation }: { invitation: Invitation }) {
   const [copied, setCopied] = useState(false);
+  const deadline = formatDeadline(invitation.expiresAt);
 
   async function copyCode() {
     try {
@@ -47,8 +67,10 @@ export default function InviteLanding({ invitation }: { invitation: Invitation }
       </div>
 
       <section className="mt-[20px] flex flex-col items-center gap-1 font-semibold" aria-label="초대 마감일">
-        <h1 className="text-[24px] leading-[34px] text-key">{invitation.deadline}</h1>
-        <p className="text-[16px] leading-6">까지 가고 싶은 장소를 저장해야 한따!</p>
+        <h1 className="text-[24px] leading-[34px] text-key">{deadline ?? "초대 마감일을 확인할 수 없어요"}</h1>
+        <p className="text-[16px] leading-6">
+          {deadline ? "까지 가고 싶은 장소를 저장해야 한따!" : "잠시 후 다시 확인해 주세요."}
+        </p>
       </section>
 
       <section className="mt-[45px] flex flex-col items-center" aria-label="초대 코드">
