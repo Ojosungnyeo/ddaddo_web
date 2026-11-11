@@ -25,8 +25,6 @@ export default function InviteStatus() {
         <h1 className="text-[24px] font-bold leading-normal text-key">초대 코드가 만료됐어요</h1>
         <p className="w-full max-w-[291px] text-[16px] font-semibold leading-6 text-[#f2f2f2]">
           72시간이 지나 초대 링크가 만료되었어요.
-          <br />
-          친구에게 새로운 초대 링크를 요청해 주세요.
         </p>
       </section>
     </main>
