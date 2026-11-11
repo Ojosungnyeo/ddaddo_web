@@ -90,10 +90,13 @@ export default function InviteLanding({ invitation }: { invitation: Invitation }
         <span className="sr-only" role="status" aria-live="polite">{copied ? "초대 코드가 복사되었습니다." : ""}</span>
       </section>
 
-      {/* 앱의 App Store 주소가 정해지면 이 버튼에 연결합니다. */}
-      <button type="button" className="mt-[34px] rounded-[10px]" aria-label="App Store에서 다운로드하기">
+      <a
+        href="https://apps.apple.com/kr/app/ddaddo/id6831445814"
+        className="mt-[34px] rounded-[10px]"
+        aria-label="App Store에서 다운로드하기"
+      >
         <Image src="/invite/app-store.png" alt="App Store에서 다운로드하기" width={189} height={60} className="h-[60px] w-[189px]" />
-      </button>
+      </a>
     </main>
   );
 }
