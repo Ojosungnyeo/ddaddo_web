@@ -1,16 +1,37 @@
 import InviteLanding from "./invite-landing";
+import InviteStatus from "./invite-status";
+import { isValidInviteEndTime } from "@/lib/invitations";
+import { Suspense } from "react";
 
-type Invitation = {
-  expiresAt: string | null;
-  code: string;
-};
+type Params = Promise<{ token: string }>;
+type SearchParams = Promise<{ endTime?: string | string[] }>;
 
-export default function InvitePage() {
-  // 초대 데이터 연동 전까지 모든 토큰에 동일한 목업을 표시합니다.
-  const invitation: Invitation = {
-    expiresAt: "2026-10-30T00:00:00+09:00",
-    code: "000000",
-  };
+async function InviteWithToken({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams: SearchParams;
+}) {
+  const { token } = await params;
+  const { endTime } = await searchParams;
+  const expiresAt = typeof endTime === "string" ? endTime : undefined;
 
-  return <InviteLanding invitation={invitation} />;
+  if (!isValidInviteEndTime(expiresAt)) return <InviteStatus />;
+
+  return <InviteLanding invitation={{ code: token, expiresAt }} />;
+}
+
+export default function InvitePage({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams: SearchParams;
+}) {
+  return (
+    <Suspense fallback={null}>
+      <InviteWithToken params={params} searchParams={searchParams} />
+    </Suspense>
+  );
 }
